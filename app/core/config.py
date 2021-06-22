@@ -1,5 +1,8 @@
-"""Application core configuration"""
+"""Application settings and configurations"""
 
+import os
+
+from dotenv import load_dotenv
 from pydantic import BaseSettings
 
 
@@ -8,7 +11,9 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Pokedex API service"
 
     class Config:
-        env_file = ".env"
+        load_dotenv("./.env")
+        PORT = os.getenv("PORT")
+        POKEMON_BASE_API = os.getenv("POKEMON_BASE_API")
 
 
 settings = Settings()
