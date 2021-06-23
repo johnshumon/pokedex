@@ -15,6 +15,7 @@ class Settings(BaseSettings):
         PORT = os.getenv("PORT")
         POKEMON_BASE_API = os.getenv("POKEMON_BASE_API")
         SHAKESPEARE_TRANSLATION_API = os.getenv("SHAKESPEARE_TRANSLATION_API")
+        YODA_TRANSLATION_API = os.getenv("YODA_TRANSLATION_API")
 
 
 settings = Settings()
