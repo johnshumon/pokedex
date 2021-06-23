@@ -2,43 +2,43 @@
 
 from typing import Any
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Response, status
 
-from app.core.config import settings
-from app.utils.async_client import client
-from app.utils.translate import shakespeare_translation
+from app.utils.async_client import fetch
+from app.utils.translation import translate
+from app.utils.translation_type import TranslationType
 
 router = APIRouter()
 
 
 @router.get("")
-async def get_translated_pokemon(pokemon_name: str) -> Any:
+async def get_translated_pokemon(pokemon_name: str, response: Response) -> Any:
     """Handler for getting a translated pokemon"""
 
-    # gets pokemon details from pokemon endpoint
-    POKEMON_BASE_API = settings.Config.POKEMON_BASE_API
-    POKEMON_URL = f"{POKEMON_BASE_API}/{pokemon_name}"
-    pokemon_api_res = await client.get(POKEMON_URL)
-    pokemon_json = pokemon_api_res.json()
+    query_result = await fetch(pokemon_name)
 
-    # gets pokemon's species details from the species
-    # url extracted from previous call
-    POKEMON_SPECIES_URL = pokemon_json["species"]["url"]
-    species_api_res = await client.get(POKEMON_SPECIES_URL)
-    species_json = species_api_res.json()
+    if query_result["status_code"] == 404:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return query_result
+
+    query_result = query_result["message"]
 
     # set values for result
-    name = pokemon_json["name"]
-    habitat = species_json["habitat"]["name"]
-    is_legendary = species_json["is_legendary"]
+    name = query_result["name"]
+    habitat = query_result["habitat"]["name"]
+    is_legendary = query_result["is_legendary"]
 
-    if habitat == "cave":
-        print("Yoda")
-        description = species_json["flavor_text_entries"][0]["flavor_text"]
+    # Translation rules:
+    # > Yoda translation: only if habitat is 'cave'
+    #   or it's a legendary Pokemon
+    # > Shakespeare translation: to all other pokemon
+    # -----------------------------------------------
+    if habitat == "cave" or is_legendary is True:
+        description = query_result["flavor_text_entries"][0]["flavor_text"]
+        translated_desc = await translate(description, TranslationType.YODA.name)
     else:
-        description = species_json["flavor_text_entries"][0]["flavor_text"]
-        # description = None
-        translated_desc = await shakespeare_translation(description)
+        description = query_result["flavor_text_entries"][0]["flavor_text"]
+        translated_desc = await translate(description, TranslationType.SHAKESPEARE.name)
 
     result = {
         "name": name,
