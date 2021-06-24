@@ -11,8 +11,10 @@ python-dotenv = "==0.18.0"
 httpx = "==0.18.1"
 
 [dev-packages]
-pylint = "*"
-flake8 = "*"
+pylint = "==2.8.3"
+flake8 = "==3.9.2"
+pytest = "==6.2.4"
+requests = "~=2.25.1"
 
 [requires]
 python_version = "3.9"
