@@ -24,11 +24,15 @@ async def translate(text: str, trans_type: str) -> str:
     headers = {"Content-Type": "application/json"}
     data = json.dumps({"text": text})
 
-    translated_res = await client.post(translation_url, headers=headers, data=data)
+    translated_res = await client.post(translation_url, headers=headers, content=data)
     translated_json = translated_res.json()
 
-    # return translated text if successful
-    # otherwise return the original
+    # return translated text if successful;
+    # origianl text otherwise. Translation
+    # still can fail for a valid text.
+    # > possible reason of no translation:
+    #   rate limit (5 calls/h) of the free
+    #   version of the translation api.
     # ------------------------------------
     if "success" in translated_json:
         translated_text = translated_json["contents"]["translated"]
