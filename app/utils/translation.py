@@ -1,8 +1,8 @@
 """Translation module"""
 import json
 
-from app.utils.async_client import client
 from app.core.config import settings
+from app.utils.async_client import client
 
 
 async def translate(text: str, trans_type: str) -> str:

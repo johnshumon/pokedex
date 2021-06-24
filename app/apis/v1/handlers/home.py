@@ -1,6 +1,7 @@
 """Home handler module"""
 
 from typing import Dict
+
 from fastapi import APIRouter
 
 router = APIRouter()

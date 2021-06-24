@@ -1,9 +1,8 @@
 """Async client module"""
 
-import httpx
-
 from typing import Any
 
+import httpx
 from fastapi import status
 
 from app.core.config import settings
