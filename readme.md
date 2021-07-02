@@ -8,7 +8,7 @@ The service follows a simple setup to get it up and running.
 
 ### Prerequisites
 
-Service requires following tech stack installed before running. Follow the official documentation in the links below to install them if not already install:
+Service requires following tech stack to be installed in the system before running.  If you do not have them installed already, follow the official documentation in the to do so:
 
 - [python 3.9](https://www.python.org/downloads)
 - [pipenv](https://pipenv.pypa.io/en/latest/install)
@@ -19,7 +19,7 @@ Optional requirement:
 
 ### Dependencies
 
-Open up a terminal and move to the root of the project. Run the following.
+Open up a terminal, move to the root of the project, and execute the following commands:
 
 ```sh
 # shell will spawn a shell with the virtualenv activated.
@@ -45,7 +45,7 @@ $ ./start
 ```
 
 **Option 2:**
-Run as a containerised service. From the root directory of the project run the following.
+Run as a containerised service. Execute the folllowing  commands from the root directory of the project.
 
 ```sh
 # build the docker image. replace <image_name:tag> with a suitable name&tag of your choice
@@ -58,7 +58,7 @@ $ docker build -t pokedex:latest .
 $ docker run --name poke -it -dp 9000:9000 pokedex:latest
 ```
 
-Browse the API documentation to the following url once  the service is up and running successfully:
+Once  the service is up and running successfully, browse the API documentation here:
 [localhost:9000/docs](http://127.0.0.1:9000/docs)
 
 ### Testing
@@ -76,9 +76,9 @@ $ python3 -m pytest tests
 
 For a production API I would do following additional steps:
 
-- Add `pre-commit-configuration` file.
+- Add a [pre-commit-configuration](https://pre-commit.com/#2-add-a-pre-commit-configuration) file.
 - Tag container image with the following format: `<image_name>:YYYY-MM-DD_HH-MM-SS`
 - Set up CI/CD pipeline to automate the testing, code coverage, and building of docker image.
-- Deploy it as a containerised service in the cloud. Therefore I would set up a cluster of service with 3 replica sets with a load balancer in front it.
-- Keep the deployment to the prod environment to be triggered manually once container image is built successfully and pushed to the container registry.
-- Update to the new version as a rolling update so there's no downtime of the service.
+- Deploy it as a containerised service in the cloud. Therefore I would set up a minimum of 3-node kubernetes cluster to deploy the service with a replica set of 3. An external load balancer in front the cluster.
+- Keep the deployment of the prod environment to be triggered manually once container image is built successfully and pushed to the container registry.
+- Update to the new version of the service as a rolling update so there's no downtime of the service.
